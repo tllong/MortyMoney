@@ -34,7 +34,7 @@ public class MortyMoneyTest {
     @Test
     public void getschmeckles() throws InterruptedException {
         // Infinite loop for infinite Schmeckles
-
+        // TODO Compile a list of device screen sizes and make a best guess of where the button will be.
         while (true) {
             // Waiting for the app to start (no way to implicitly check sadly.)
             sleep(15000);
@@ -50,8 +50,14 @@ public class MortyMoneyTest {
 
             // Checks if a redirect add was played. If yes, press the devices back button.
             checkForAd();
+
             if (checkForAd())
                 driver.pressKeyCode(4);
+            System.out.println("No fancy Ad Found");
+
+            if (checkForError())
+                driver.findElementByName("Dismiss").click();
+            System.out.println("No Error message found");
         }
 
     }
@@ -60,6 +66,10 @@ public class MortyMoneyTest {
         // findElements returns an empty list if nothing is found instead of an exception.
         // This is used to stop it from throwing a NoSuchElementException
 
-        return driver.findElementsByClassName("Impact Webview").size() > 0;
+        return driver.findElementsByName("Impact Webview").size() > 0;
+    }
+
+    public boolean checkForError() {
+        return driver.findElementsByName("We're sorry, something went wrong. Please try again.").size() > 0;
     }
 }
