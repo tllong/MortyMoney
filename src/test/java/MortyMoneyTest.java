@@ -25,7 +25,6 @@ public class MortyMoneyTest extends Utils {
         }
         String deviceName = deviceOutput.toString().replace("[", "").replace("]", "");
 
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("deviceName", deviceName);
         capabilities.setCapability("appPackage", "com.turner.pocketmorties");
