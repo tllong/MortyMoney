@@ -9,17 +9,25 @@ import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
-public class MortyMoneyTest {
+public class MortyMoneyTest extends Utils {
 
     private AndroidDriver driver;
 
     @Before
     public void setUp() throws Exception {
+       List<String> deviceOutput = runProcess(false, "adb shell getprop ro.product.model");
+        if (deviceOutput == null) {
+            throw new AssertionError();
+        }
+        String deviceName = deviceOutput.toString().replace("[", "").replace("]", "");
+
+
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("deviceName", "Nexus 5X");
+        capabilities.setCapability("deviceName", deviceName);
         capabilities.setCapability("appPackage", "com.turner.pocketmorties");
         capabilities.setCapability("appActivity", "com.prime31.UnityPlayerNativeActivity");
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
