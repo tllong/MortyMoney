@@ -1,8 +1,5 @@
-/**
- * Created by Jramey on 1/14/16.
- */
-
 import io.appium.java_client.android.AndroidDriver;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,25 +7,22 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.Thread.sleep;
 
 public class MortyMoneyTest extends Utils {
 
-    private AndroidDriver driver;
+    private static AndroidDriver driver;
 
     @Before
     public void setUp() throws Exception {
-       List<String> deviceOutput = runProcess(false, "adb shell getprop ro.product.model");
-        if (deviceOutput == null) {
-            throw new AssertionError();
-        }
-        String deviceName = deviceOutput.toString().replace("[", "").replace("]", "");
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("deviceName", deviceName);
+        capabilities.setCapability("deviceName", getDeviceName());
         capabilities.setCapability("appPackage", "com.turner.pocketmorties");
         capabilities.setCapability("appActivity", "com.prime31.UnityPlayerNativeActivity");
+        capabilities.setCapability("newCommandTimeout", "0");
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
 
@@ -37,34 +31,47 @@ public class MortyMoneyTest extends Utils {
         driver.quit();
     }
 
-
     @Test
     public void getschmeckles() throws InterruptedException {
         // Infinite loop for infinite Schmeckles
-        // TODO Compile a list of device screen sizes and make a best guess of where the button will be.
+        // TODO Use device screenSize to calculate common delta of the button.
+
+        // Waiting for the app to start (no way to implicitly check sadly.)
+        System.out.println("waiting 15 seconds");
+        sleep(15000);
+
+        // Tapping on the + button to watch videos
+        //driver.tap(1, 130, 970, 1);
+
+        driver.tap(1, 140, 1080, 1);
+
         while (true) {
-            // Waiting for the app to start (no way to implicitly check sadly.)
-            sleep(15000);
-
-            // Tapping on the + button to watch videos
-            driver.tap(1, 130, 970, 1);
-
             // Tapping on the watch video button
-            driver.tap(1, 1450, 900, 1);
+            //driver.tap(1, 1450, 900, 1);
+            driver.tap(1, 1450, 1010, 1);
 
-            // waiting 100 seconds for the ad to finish
-            sleep(100000);
+            // waiting 60 seconds for the ad to finish
+            System.out.println("waiting 60 seconds");
+            sleep(60000);
 
             // Checks if a redirect add was played. If yes, press the devices back button.
             checkForAd();
+            checkForError();
 
-            if (checkForAd())
+            if (checkForAd()) {
+                System.out.println("Fancy Ad Found");
                 driver.pressKeyCode(4);
-            System.out.println("No fancy Ad Found");
+            } else {
+                System.out.println("No fancy Ad Found");
+            }
 
-            if (checkForError())
+
+            if (checkForError()) {
+                System.out.println("Error message found");
                 driver.findElementByName("Dismiss").click();
-            System.out.println("No Error message found");
+            } else {
+                System.out.println("No Error message found");
+            }
         }
 
     }
@@ -73,10 +80,40 @@ public class MortyMoneyTest extends Utils {
         // findElements returns an empty list if nothing is found instead of an exception.
         // This is used to stop it from throwing a NoSuchElementException
 
-        return driver.findElementsByName("Impact Webview").size() > 0;
+        return driver.findElementsByClassName("android.webkit.WebView").size() > 0;
     }
 
-    public boolean checkForError() {
+    public static boolean checkForError() {
         return driver.findElementsByName("We're sorry, something went wrong. Please try again.").size() > 0;
     }
+
+    public static int[] getDeviceSize() {
+        List<String> dumpsysWindow = runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
+        if (dumpsysWindow == null) {
+            throw new AssertionError();
+        }
+        String screenSize = dumpsysWindow.toString();
+        // TODO Not going to work for all devices. 600X800 as an example.
+        Pattern getXByX = Pattern.compile("([0-9].*)x([1-8][0-9][0-9][0-9])");
+        Matcher matcher = getXByX.matcher(screenSize);
+
+        int width = Integer.parseInt(matcher.group(1));
+        int height = Integer.parseInt(matcher.group(2));
+
+        return new int[]{width, height};
+    }
+
+    public static String getDeviceName() {
+        List<String> deviceOutput = runProcess(isWin(), "adb shell getprop ro.product.model");
+        if (deviceOutput == null) {
+            throw new AssertionError();
+        }
+
+        return deviceOutput.toString().replace("[", "").replace("]", "");
+    }
+
+    public static boolean isWin() {
+        return SystemUtils.IS_OS_WINDOWS;
+    }
+
 }
