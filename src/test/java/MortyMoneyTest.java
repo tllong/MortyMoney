@@ -4,15 +4,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import utils.Utils;
 
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import static java.lang.Thread.sleep;
 
-public class MortyMoneyTest extends Utils {
+public class MortyMoneyTest {
 
     private static AndroidDriver driver;
 
@@ -88,23 +90,24 @@ public class MortyMoneyTest extends Utils {
     }
 
     public static int[] getDeviceSize() {
-        List<String> dumpsysWindow = runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
+        List<String> dumpsysWindow = Utils.runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
         if (dumpsysWindow == null) {
             throw new AssertionError();
         }
+
         String screenSize = dumpsysWindow.toString();
-        
+
         Pattern getXByX = Pattern.compile("([0-9].*)x([0-9].*)");
         Matcher matcher = getXByX.matcher(screenSize);
 
         int width = Integer.parseInt(matcher.group(1));
         int height = Integer.parseInt(matcher.group(2));
-
         return new int[]{width, height};
     }
 
+
     public static String getDeviceName() {
-        List<String> deviceOutput = runProcess(isWin(), "adb shell getprop ro.product.model");
+        List<String> deviceOutput = Utils.runProcess(isWin(), "adb shell getprop ro.product.model");
         if (deviceOutput == null) {
             throw new AssertionError();
         }
