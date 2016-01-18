@@ -93,8 +93,8 @@ public class MortyMoneyTest extends Utils {
             throw new AssertionError();
         }
         String screenSize = dumpsysWindow.toString();
-        // TODO Not going to work for all devices. 600X800 as an example.
-        Pattern getXByX = Pattern.compile("([0-9].*)x([1-8][0-9][0-9][0-9])");
+        
+        Pattern getXByX = Pattern.compile("([0-9].*)x([0-9].*)");
         Matcher matcher = getXByX.matcher(screenSize);
 
         int width = Integer.parseInt(matcher.group(1));
