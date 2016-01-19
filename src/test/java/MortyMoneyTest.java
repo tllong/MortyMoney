@@ -1,5 +1,6 @@
 import io.appium.java_client.android.AndroidDriver;
 import org.apache.commons.lang3.SystemUtils;
+import org.jetbrains.annotations.Contract;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,6 +116,7 @@ public class MortyMoneyTest {
         return deviceOutput.toString().replace("[", "").replace("]", "");
     }
 
+    @Contract(pure = true)
     public static boolean isWin() {
         return SystemUtils.IS_OS_WINDOWS;
     }
