@@ -1,21 +1,18 @@
 import io.appium.java_client.android.AndroidDriver;
 import org.apache.commons.lang3.SystemUtils;
-import org.jetbrains.annotations.Contract;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import utils.Utils;
 
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import static java.lang.Thread.sleep;
 
-public class MortyMoneyTest {
+public class MortyMoneyTest extends Utils {
 
     private static AndroidDriver driver;
 
@@ -50,19 +47,20 @@ public class MortyMoneyTest {
 
         while (true) {
             // Tapping on the watch video button
+
             //driver.tap(1, 1450, 900, 1);
             driver.tap(1, 1450, 1010, 1);
 
             // waiting 60 seconds for the ad to finish
-            System.out.println("waiting 60 seconds");
-            sleep(60000);
+            System.out.println("waiting 30 seconds");
+            sleep(30000);
 
             // Checks if a redirect add was played. If yes, press the devices back button.
             checkForAd();
             checkForError();
 
             if (checkForAd()) {
-                System.out.println("Fancy Ad Found");
+                System.out.println("Fancy Ad Found!!!!!!");
                 driver.pressKeyCode(4);
             } else {
                 System.out.println("No fancy Ad Found");
@@ -70,7 +68,7 @@ public class MortyMoneyTest {
 
 
             if (checkForError()) {
-                System.out.println("Error message found");
+                System.out.println("Error message found!!!!!");
                 driver.findElementByName("Dismiss").click();
             } else {
                 System.out.println("No Error message found");
@@ -79,7 +77,7 @@ public class MortyMoneyTest {
 
     }
 
-    public static boolean checkForAd() {
+    public boolean checkForAd() {
         // findElements returns an empty list if nothing is found instead of an exception.
         // This is used to stop it from throwing a NoSuchElementException
 
@@ -91,24 +89,22 @@ public class MortyMoneyTest {
     }
 
     public static int[] getDeviceSize() {
-        List<String> dumpsysWindow = Utils.runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
+        List<String> dumpsysWindow = runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
         if (dumpsysWindow == null) {
             throw new AssertionError();
         }
-
         String screenSize = dumpsysWindow.toString();
-
-        Pattern getXByX = Pattern.compile("([0-9].*)x([0-9].*)");
-        Matcher matcher = getXByX.matcher(screenSize);
+        Pattern getScreenResolution = Pattern.compile("(\\d+)x(\\d+)");
+        Matcher matcher = getScreenResolution.matcher(screenSize);
 
         int width = Integer.parseInt(matcher.group(1));
         int height = Integer.parseInt(matcher.group(2));
+
         return new int[]{width, height};
     }
 
-
     public static String getDeviceName() {
-        List<String> deviceOutput = Utils.runProcess(isWin(), "adb shell getprop ro.product.model");
+        List<String> deviceOutput = runProcess(isWin(), "adb shell getprop ro.product.model");
         if (deviceOutput == null) {
             throw new AssertionError();
         }
@@ -116,7 +112,6 @@ public class MortyMoneyTest {
         return deviceOutput.toString().replace("[", "").replace("]", "");
     }
 
-    @Contract(pure = true)
     public static boolean isWin() {
         return SystemUtils.IS_OS_WINDOWS;
     }
