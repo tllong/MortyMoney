@@ -47,7 +47,6 @@ public class Utils {
         }
     }
 
-
     public static int[] getDeviceSize() {
         List<String> dumpsysWindow = runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
         if (dumpsysWindow == null) {
@@ -56,7 +55,9 @@ public class Utils {
         String screenSize = dumpsysWindow.toString().replace("[", "").replace("]", "").replaceAll(".* ", "");
         Pattern getScreenResolution = Pattern.compile("(\\d+)x(\\d+)");
         Matcher matcher = getScreenResolution.matcher(screenSize);
+        // Voodoo, will override matches without it. 
         matcher.matches();
+
         int width = Integer.parseInt(matcher.group(1));
         int height = Integer.parseInt(matcher.group(2));
 
