@@ -30,7 +30,6 @@ public class MortyMoneyTest extends Utils {
     @Test
     public void getschmeckles() throws InterruptedException {
         // Infinite loop for infinite Schmeckles
-
         int newPlusX = suggestPlusButtonCords(getDeviceSize())[0];
         int newPlusY = suggestPlusButtonCords(getDeviceSize())[1];
 
@@ -42,17 +41,13 @@ public class MortyMoneyTest extends Utils {
         sleep(15000);
 
         // Tapping on the + button to watch videos
-        //driver.tap(1, 130, 970, 1);
-
         driver.tap(1, newPlusX, newPlusY, 1);
 
         while (true) {
             // Tapping on the watch video button
-
-            //driver.tap(1, 1450, 900, 1);
             driver.tap(1, newWatchX, newWatchY, 1);
 
-            // waiting 60 seconds for the ad to finish
+            // waiting 30 seconds for the ad to finish
             System.out.println("waiting 30 seconds");
             sleep(30000);
 
@@ -81,7 +76,6 @@ public class MortyMoneyTest extends Utils {
     public boolean checkForAd() {
         // findElements returns an empty list if nothing is found instead of an exception.
         // This is used to stop it from throwing a NoSuchElementException
-
         return driver.findElementsByClassName("android.webkit.WebView").size() > 0;
     }
 
