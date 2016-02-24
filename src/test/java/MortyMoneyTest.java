@@ -1,5 +1,4 @@
 import io.appium.java_client.android.AndroidDriver;
-import org.apache.commons.lang3.SystemUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

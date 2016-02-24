@@ -1,16 +1,16 @@
 import org.apache.commons.lang3.SystemUtils;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-    private static final String[] WIN_RUNTIME = { "cmd.exe", "/C" };
-    private static final String[] OS_LINUX_RUNTIME = { "/bin/bash", "-l", "-c" };
+    private static final String[] WIN_RUNTIME = {"cmd.exe", "/C"};
+    private static final String[] OS_LINUX_RUNTIME = {"/bin/bash", "-l", "-c"};
 
     Utils() {
     }
@@ -77,7 +77,7 @@ public class Utils {
     }
 
 
-    public static int [] suggestPlusButtonCords(int [] screenRes){
+    public static int[] suggestPlusButtonCords(int[] screenRes) {
         // Delta of the plus button position based on screenSize
         double x = screenRes[0] * 0.07;
         double y = screenRes[1] * 0.9;
@@ -88,7 +88,7 @@ public class Utils {
         return new int[]{intX, intY};
     }
 
-    public static int[] suggestWatchButtonCords(int [] screenRes){
+    public static int[] suggestWatchButtonCords(int[] screenRes) {
         // Delta of the watch button position based on screenSize
         double x = screenRes[0] * 0.75;
         double y = screenRes[1] * 0.85;
