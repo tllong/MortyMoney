@@ -29,7 +29,6 @@ public class MortyMoneyTest extends Utils {
 
     @Test
     public void getschmeckles() throws InterruptedException {
-        // Infinite loop for infinite Schmeckles
         int newPlusX = suggestPlusButtonCords(getDeviceSize())[0];
         int newPlusY = suggestPlusButtonCords(getDeviceSize())[1];
 
@@ -42,7 +41,8 @@ public class MortyMoneyTest extends Utils {
 
         // Tapping on the + button to watch videos
         driver.tap(1, newPlusX, newPlusY, 1);
-
+        
+        // Infinite loop for infinite Schmeckles
         while (true) {
             // Tapping on the watch video button
             driver.tap(1, newWatchX, newWatchY, 1);
