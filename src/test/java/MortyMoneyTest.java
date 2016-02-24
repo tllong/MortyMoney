@@ -6,9 +6,6 @@ import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.net.URL;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.lang.Thread.sleep;
 
@@ -36,6 +33,12 @@ public class MortyMoneyTest extends Utils {
         // Infinite loop for infinite Schmeckles
         // TODO Use device screenSize to calculate common delta of the button.
 
+        int newPlusX = suggestPlusButtonCords(getDeviceSize())[0];
+        int newPlusY = suggestPlusButtonCords(getDeviceSize())[1];
+
+        int newWatchX = suggestWatchButtonCords(getDeviceSize())[0];
+        int newWatchY = suggestWatchButtonCords(getDeviceSize())[1];
+
         // Waiting for the app to start (no way to implicitly check sadly.)
         System.out.println("waiting 15 seconds");
         sleep(15000);
@@ -57,7 +60,6 @@ public class MortyMoneyTest extends Utils {
 
             // Checks if a redirect add was played. If yes, press the devices back button.
             checkForAd();
-            checkForError();
 
             if (checkForAd()) {
                 System.out.println("Fancy Ad Found!!!!!!");
@@ -66,6 +68,7 @@ public class MortyMoneyTest extends Utils {
                 System.out.println("No fancy Ad Found");
             }
 
+            checkForError();
 
             if (checkForError()) {
                 System.out.println("Error message found!!!!!");
@@ -87,33 +90,5 @@ public class MortyMoneyTest extends Utils {
     public static boolean checkForError() {
         return driver.findElementsByName("We're sorry, something went wrong. Please try again.").size() > 0;
     }
-
-    public static int[] getDeviceSize() {
-        List<String> dumpsysWindow = runProcess(isWin(), "adb shell dumpsys window | grep \"mUnrestrictedScreen\" ");
-        if (dumpsysWindow == null) {
-            throw new AssertionError();
-        }
-        String screenSize = dumpsysWindow.toString();
-        Pattern getScreenResolution = Pattern.compile("(\\d+)x(\\d+)");
-        Matcher matcher = getScreenResolution.matcher(screenSize);
-
-        int width = Integer.parseInt(matcher.group(1));
-        int height = Integer.parseInt(matcher.group(2));
-
-        return new int[]{width, height};
-    }
-
-    public static String getDeviceName() {
-        List<String> deviceOutput = runProcess(isWin(), "adb shell getprop ro.product.model");
-        if (deviceOutput == null) {
-            throw new AssertionError();
-        }
-
-        return deviceOutput.toString().replace("[", "").replace("]", "");
-    }
-
-    public static boolean isWin() {
-        return SystemUtils.IS_OS_WINDOWS;
-    }
-
 }
+
