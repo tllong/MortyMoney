@@ -31,7 +31,6 @@ public class MortyMoneyTest extends Utils {
     @Test
     public void getschmeckles() throws InterruptedException {
         // Infinite loop for infinite Schmeckles
-        // TODO Use device screenSize to calculate common delta of the button.
 
         int newPlusX = suggestPlusButtonCords(getDeviceSize())[0];
         int newPlusY = suggestPlusButtonCords(getDeviceSize())[1];
@@ -46,13 +45,13 @@ public class MortyMoneyTest extends Utils {
         // Tapping on the + button to watch videos
         //driver.tap(1, 130, 970, 1);
 
-        driver.tap(1, 140, 1080, 1);
+        driver.tap(1, newPlusX, newPlusY, 1);
 
         while (true) {
             // Tapping on the watch video button
 
             //driver.tap(1, 1450, 900, 1);
-            driver.tap(1, 1450, 1010, 1);
+            driver.tap(1, newWatchX, newWatchY, 1);
 
             // waiting 60 seconds for the ad to finish
             System.out.println("waiting 30 seconds");

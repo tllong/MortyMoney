@@ -53,10 +53,10 @@ public class Utils {
         if (dumpsysWindow == null) {
             throw new AssertionError();
         }
-        String screenSize = dumpsysWindow.toString();
+        String screenSize = dumpsysWindow.toString().replace("[", "").replace("]", "").replaceAll(".* ", "");
         Pattern getScreenResolution = Pattern.compile("(\\d+)x(\\d+)");
         Matcher matcher = getScreenResolution.matcher(screenSize);
-
+        matcher.matches();
         int width = Integer.parseInt(matcher.group(1));
         int height = Integer.parseInt(matcher.group(2));
 
@@ -77,22 +77,26 @@ public class Utils {
     }
 
 
-    public static int[] suggestPlusButtonCords(int [] screenRes){
-        int x = screenRes[0];
-        int y = screenRes[1];
+    public static int [] suggestPlusButtonCords(int [] screenRes){
+        // Delta of the plus button position based on screenSize
+        double x = screenRes[0] * 0.07;
+        double y = screenRes[1] * 0.9;
 
+        int intX = (int) x;
+        int intY = (int) y;
 
-
-        return new int[]{newX,newY};
+        return new int[]{intX, intY};
     }
 
     public static int[] suggestWatchButtonCords(int [] screenRes){
-        int x = screenRes[0];
-        int y = screenRes[1];
+        // Delta of the watch button position based on screenSize
+        double x = screenRes[0] * 0.75;
+        double y = screenRes[1] * 0.85;
 
+        int intX = (int) x;
+        int intY = (int) y;
 
-
-        return new int[]{newX,newY};
+        return new int[]{intX, intY};
     }
 
 }
