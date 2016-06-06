@@ -73,7 +73,7 @@ public class MortyMoneyTest extends Utils {
 
     }
 
-    public boolean checkForAd() {
+    public static boolean checkForAd() {
         // findElements returns an empty list if nothing is found instead of an exception.
         // This is used to stop it from throwing a NoSuchElementException
         return driver.findElementsByClassName("android.webkit.WebView").size() > 0;
